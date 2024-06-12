@@ -13,48 +13,6 @@ metadata:
     helm.sh/chart: tidb-operator-v1.6.0
 ---
 # Source: tidb-operator/templates/controller-manager-rbac.yaml
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: tidb-test:tidb-controller-manager
-  labels:
-    app.kubernetes.io/name: tidb-operator
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/instance: tidb-test
-    app.kubernetes.io/component: controller-manager
-    helm.sh/chart: tidb-operator-v1.6.0
-rules:
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["persistentvolumes"]
-    verbs: ["create", "get", "list", "watch", "patch", "update"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses"]
-    verbs: ["get", "list", "watch"]
----
-# Source: tidb-operator/templates/controller-manager-rbac.yaml
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: tidb-test:tidb-controller-manager
-  labels:
-    app.kubernetes.io/name: tidb-operator
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/instance: tidb-test
-    app.kubernetes.io/component: controller-manager
-    helm.sh/chart: tidb-operator-v1.6.0
-subjects:
-  - kind: ServiceAccount
-    name: tidb-controller-manager
-    namespace: tidb
-roleRef:
-  kind: ClusterRole
-  name: tidb-test:tidb-controller-manager
-  apiGroup: rbac.authorization.k8s.io
----
-# Source: tidb-operator/templates/controller-manager-rbac.yaml
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -171,8 +129,8 @@ spec:
               cpu: 80m
               memory: 50Mi
             limits:
-              cpu: 400m
-              memory: 250Mi
+              cpu: 800m
+              memory: 500Mi
           livenessProbe:
             tcpSocket:
               port: 6060
@@ -184,9 +142,9 @@ spec:
             - -tidb-backup-manager-image=pingcap/tidb-backup-manager:v1.6.0
             - -tidb-discovery-image=pingcap/tidb-operator:v1.6.0
             - -cluster-scoped=false
-            - -cluster-permission-node=true
-            - -cluster-permission-pv=true
-            - -cluster-permission-sc=true
+            - -cluster-permission-node=false
+            - -cluster-permission-pv=false
+            - -cluster-permission-sc=false
             - -auto-failover=true
             - -pd-failover-period=5m
             - -tikv-failover-period=5m

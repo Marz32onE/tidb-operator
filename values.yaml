@@ -60,9 +60,9 @@ controllerManager:
   # clusterPermissions are some cluster scoped permissions that will be used even if `clusterScoped: false`.
   # the default value of these fields is `true`. if you want them to be `false`, you MUST set them to `false` explicitly.
   clusterPermissions:
-    nodes: true
-    persistentvolumes: true
-    storageclasses: true
+    nodes: false
+    persistentvolumes: false
+    storageclasses: false
 
   logLevel: 2
   replicas: 1
